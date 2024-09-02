@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import '../models/product.dart';
 import '../viewmodels/product_viewmodel.dart';
 
@@ -17,23 +18,23 @@ class _ProductAddEditViewState extends State<ProductAddEditView> {
 
   late TextEditingController _nameController;
   late TextEditingController _descriptionController;
-  late TextEditingController _priceController;
+  late MaskedTextController _priceController;
   late TextEditingController _imageController;
   late String _selectedCategory;
 
-  final List<String> _categories = ['Electronics', 'Clothing', 'Books', 'Home & Garden']; // Replace with your categories
+  final List<String> _categories = ['Electronics', 'Clothing', 'Books', 'Home & Garden'];
 
   @override
   void initState() {
     super.initState();
 
     _nameController = TextEditingController(text: widget.product?.name ?? '');
-    _descriptionController =
-        TextEditingController(text: widget.product?.description ?? '');
-    _priceController =
-        TextEditingController(text: widget.product?.price.toString() ?? '0.0');
-    _imageController =
-        TextEditingController(text: widget.product?.image ?? '');
+    _descriptionController = TextEditingController(text: widget.product?.description ?? '');
+    _priceController = MaskedTextController(
+      mask: '000000.00',
+      text: widget.product?.price.toString() ?? '0.0',
+    );
+    _imageController = TextEditingController(text: widget.product?.image ?? '');
     _selectedCategory = widget.product?.category ?? _categories.first;
   }
 
@@ -50,7 +51,7 @@ class _ProductAddEditViewState extends State<ProductAddEditView> {
   Widget build(BuildContext context) {
     final inputDecoration = InputDecoration(
       filled: true,
-      fillColor: Colors.grey[200], // Change this to another shade of white
+      fillColor: Colors.grey[200],
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10.0),
         borderSide: BorderSide.none,
@@ -71,11 +72,12 @@ class _ProductAddEditViewState extends State<ProductAddEditView> {
         title: Text(widget.product == null ? 'Add Product' : 'Edit Product'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(25.0),
         child: Form(
           key: _formKey,
           child: ListView(
             children: <Widget>[
+              const SizedBox(height: 20),
               TextFormField(
                 controller: _nameController,
                 decoration: inputDecoration.copyWith(labelText: 'Name'),
@@ -86,7 +88,7 @@ class _ProductAddEditViewState extends State<ProductAddEditView> {
                   return null;
                 },
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
               TextFormField(
                 controller: _descriptionController,
                 decoration: inputDecoration.copyWith(labelText: 'Description'),
@@ -97,7 +99,7 @@ class _ProductAddEditViewState extends State<ProductAddEditView> {
                   return null;
                 },
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
               TextFormField(
                 controller: _priceController,
                 decoration: inputDecoration.copyWith(labelText: 'Price'),
@@ -109,7 +111,7 @@ class _ProductAddEditViewState extends State<ProductAddEditView> {
                   return null;
                 },
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
               DropdownButtonFormField<String>(
                 value: _selectedCategory,
                 decoration: inputDecoration.copyWith(labelText: 'Category'),
@@ -131,7 +133,7 @@ class _ProductAddEditViewState extends State<ProductAddEditView> {
                   return null;
                 },
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
               TextFormField(
                 controller: _imageController,
                 decoration: inputDecoration.copyWith(labelText: 'Image URL'),
@@ -142,30 +144,38 @@ class _ProductAddEditViewState extends State<ProductAddEditView> {
                   return null;
                 },
               ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
-                    final product = Product(
-                      id: widget.product?.id,
-                      name: _nameController.text,
-                      description: _descriptionController.text,
-                      price: double.parse(_priceController.text),
-                      category: _selectedCategory,
-                      image: _imageController.text,
-                    );
+              const SizedBox(height: 35),
+              SizedBox(
+                height: 50, // Set the height for the button
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState!.save();
+                      final product = Product(
+                        id: widget.product?.id,
+                        name: _nameController.text,
+                        description: _descriptionController.text,
+                        price: double.parse(_priceController.text),
+                        category: _selectedCategory,
+                        image: _imageController.text,
+                      );
 
-                    final viewModel = Provider.of<ProductViewModel>(context, listen: false);
-                    if (widget.product == null) {
-                      viewModel.addProduct(product);
-                    } else {
-                      viewModel.updateProduct(product);
+                      final viewModel = Provider.of<ProductViewModel>(context, listen: false);
+                      if (widget.product == null) {
+                        viewModel.addProduct(product);
+                      } else {
+                        viewModel.updateProduct(product);
+                      }
+                      Navigator.pop(context);
                     }
-                    Navigator.pop(context);
-                  }
-                },
-                child: Text(widget.product == null ? 'Add Product' : 'Update Product'),
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0), // Add border radius
+                    ),
+                  ),
+                  child: Text(widget.product == null ? 'Add Product' : 'Update Product'),
+                ),
               ),
             ],
           ),

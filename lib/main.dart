@@ -14,12 +14,13 @@ class MyApp extends StatelessWidget {
       create: (context) => ProductViewModel(),
       child: MaterialApp(
         title: 'Product Catalog',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blueGrey,
           scaffoldBackgroundColor: Colors.white,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: ProductListView(),
+        home: const ProductListView(),
       ),
     );
   }
