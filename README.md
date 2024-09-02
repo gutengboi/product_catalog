@@ -1,16 +1,30 @@
-# product_catalog_app
+# Product Catalog App
 
-A new Flutter project.
+## Overview
 
-## Getting Started
+The **Product Catalog App** is a mobile application built using Flutter. It allows users to browse through a catalog of products, view detailed information, and filter products based on category and price range. Users can also add, edit, and delete products within the app. The app follows the MVVM (Model-View-ViewModel) architecture and uses `Provider` for state management, ensuring a clean separation of concerns and efficient data handling.
 
-This project is a starting point for a Flutter application.
+## Features
 
-A few resources to get you started if this is your first Flutter project:
+- Browse and search products.
+- View detailed product information.
+- Filter products by category and price range.
+- Add, edit, and delete products.
+- Simple, appealing, and responsive UI/UX.
+- Persistent local storage using SQLite for offline data access.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Setup and Running the App Locally
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Prerequisites
+
+- **Flutter SDK**: Ensure you have Flutter installed. If not, follow the [official installation guide](https://flutter.dev/docs/get-started/install).
+- **IDE**: You can use Android Studio, Visual Studio Code, or any IDE that supports Flutter.
+
+### Instructions
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/yourusername/product-catalog-app.git
+   cd product-catalog-app
+
+
