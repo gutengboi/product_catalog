@@ -79,13 +79,12 @@ class _FilterViewState extends State<FilterView> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                // Apply filters
                 Provider.of<ProductViewModel>(context, listen: false).filterProducts(
                   _selectedCategory,
                   _minPrice,
                   _maxPrice,
                 );
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: const Text('Apply Filters'),
             ),

@@ -15,7 +15,6 @@ class Product {
     required this.image,
   });
 
-  // Convert a Product into a Map
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -27,7 +26,6 @@ class Product {
     };
   }
 
-  // Convert a Map into a Product
   factory Product.fromMap(Map<String, dynamic> map) {
     return Product(
       id: map['id'],

@@ -25,12 +25,15 @@ class ProductService {
 
   Future<void> insertProduct(Product product) async {
     final db = await database;
-    await db.insert(
+    final int id = await db.insert(
       'products',
       product.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+
+    product.id = id;
   }
+
 
   Future<List<Product>> products() async {
     final db = await database;

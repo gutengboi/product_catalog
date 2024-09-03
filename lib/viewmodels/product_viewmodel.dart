@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/product.dart';
 
 class ProductViewModel extends ChangeNotifier {
-  List<Product> _allProducts = []; // All products loaded from the database
+  List<Product> _allProducts = [];
   List<Product> _filteredProducts = [];
 
   List<Product> get products => _filteredProducts;

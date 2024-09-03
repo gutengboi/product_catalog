@@ -18,11 +18,11 @@ class _ProductAddEditViewState extends State<ProductAddEditView> {
 
   late TextEditingController _nameController;
   late TextEditingController _descriptionController;
-  late MaskedTextController _priceController;
+  late MoneyMaskedTextController _priceController;
   late TextEditingController _imageController;
   late String _selectedCategory;
 
-  final List<String> _categories = ['Electronics', 'Clothing', 'Books', 'Home & Garden'];
+  final List<String> _categories = ['Electronics', 'Clothing', 'Home','Books'];
 
   @override
   void initState() {
@@ -30,10 +30,13 @@ class _ProductAddEditViewState extends State<ProductAddEditView> {
 
     _nameController = TextEditingController(text: widget.product?.name ?? '');
     _descriptionController = TextEditingController(text: widget.product?.description ?? '');
-    _priceController = MaskedTextController(
-      mask: '000000.00',
-      text: widget.product?.price.toString() ?? '0.0',
+    _priceController = MoneyMaskedTextController(
+        decimalSeparator: '.', thousandSeparator: ','
+
     );
+    if(widget.product != null ){
+      _priceController.updateValue(widget.product!.price);
+    }
     _imageController = TextEditingController(text: widget.product?.image ?? '');
     _selectedCategory = widget.product?.category ?? _categories.first;
   }
@@ -146,7 +149,7 @@ class _ProductAddEditViewState extends State<ProductAddEditView> {
               ),
               const SizedBox(height: 35),
               SizedBox(
-                height: 50, // Set the height for the button
+                height: 50,
                 child: ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
@@ -155,7 +158,7 @@ class _ProductAddEditViewState extends State<ProductAddEditView> {
                         id: widget.product?.id,
                         name: _nameController.text,
                         description: _descriptionController.text,
-                        price: double.parse(_priceController.text),
+                        price: _priceController.numberValue,
                         category: _selectedCategory,
                         image: _imageController.text,
                       );
@@ -171,7 +174,7 @@ class _ProductAddEditViewState extends State<ProductAddEditView> {
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0), // Add border radius
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
                   child: Text(widget.product == null ? 'Add Product' : 'Update Product'),

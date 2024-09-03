@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../models/product.dart';
 import '../viewmodels/product_viewmodel.dart';
-import 'package:provider/provider.dart';
+import '../services/product_service.dart';
 import '../views/product_add_edit_view.dart';
-import '../views/product_detail_view.dart'; // Import the ProductDetailView
+import '../views/product_detail_view.dart';
 
 class ProductItemWidget extends StatelessWidget {
   final Product product;
@@ -14,7 +15,6 @@ class ProductItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Navigate to the ProductDetailView
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -24,33 +24,31 @@ class ProductItemWidget extends StatelessWidget {
       },
       child: Card(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0), // Rounded corners
+          borderRadius: BorderRadius.circular(12.0),
         ),
-        elevation: 3, // Shadow depth
+        elevation: 3,
         margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Product Image
               ClipRRect(
                 borderRadius: BorderRadius.circular(8.0),
                 child: Image.network(
                   product.image,
-                  height: 60, // Reduced height
-                  width: 60, // Reduced width
+                  height: 60,
+                  width: 60,
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) {
                     return const Icon(
                       Icons.broken_image,
                       size: 60,
-                    ); // Fallback icon if image fails to load
+                    );
                   },
                 ),
               ),
               const SizedBox(width: 10),
-              // Product Name and Price
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,7 +56,7 @@ class ProductItemWidget extends StatelessWidget {
                     Text(
                       product.name,
                       style: const TextStyle(
-                        fontSize: 16, // Reduced font size
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -66,7 +64,7 @@ class ProductItemWidget extends StatelessWidget {
                     Text(
                       'Price: \$${product.price.toStringAsFixed(2)}',
                       style: TextStyle(
-                        fontSize: 14, // Reduced font size
+                        fontSize: 14,
                         color: Colors.grey[700],
                       ),
                     ),
@@ -74,14 +72,12 @@ class ProductItemWidget extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 8),
-              // Edit and Delete Buttons
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton(
                     icon: const Icon(Icons.edit),
                     onPressed: () {
-                      // Navigate to the product edit view
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -115,14 +111,36 @@ class ProductItemWidget extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: const Text('Cancel'),
             ),
             TextButton(
-              onPressed: () {
-                Provider.of<ProductViewModel>(context, listen: false).deleteProduct(product.id!);
-                Navigator.of(context).pop(); // Close the dialog
+              onPressed: () async {
+
+                print('Attempting to delete product with ID: ${product.id}');
+
+                if (product.id != null) {
+
+                  await Provider.of<ProductService>(context, listen: false)
+                      .deleteProduct(product.id!);
+
+                  Provider.of<ProductViewModel>(context, listen: false)
+                      .deleteProduct(product.id!);
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Product deleted successfully'),
+                    ),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Error: Cannot delete new product'),
+                    ),
+                  );
+                }
+                Navigator.of(context).pop();
               },
               child: const Text(
                 'Delete',
@@ -134,4 +152,5 @@ class ProductItemWidget extends StatelessWidget {
       },
     );
   }
+
 }

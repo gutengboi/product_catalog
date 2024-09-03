@@ -17,17 +17,17 @@ class ProductDetailView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Display the product image
+
             Center(
               child: Image.network(
                 product.image,
-                height: 250, // Adjust height as needed
+                height: 250,
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) {
                   return const Icon(
                     Icons.broken_image,
                     size: 250,
-                  ); // Fallback icon if image fails to load
+                  );
                 },
               ),
             ),
@@ -54,7 +54,6 @@ class ProductDetailView extends StatelessWidget {
                 fontSize: 16,
               ),
             ),
-            // Add more details if needed (e.g., product category, additional images, etc.)
           ],
         ),
       ),
