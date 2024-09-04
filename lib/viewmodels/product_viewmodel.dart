@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:product_catalog_app/services/product_service.dart';
 import '../models/product.dart';
 
 class ProductViewModel extends ChangeNotifier {
@@ -7,9 +8,12 @@ class ProductViewModel extends ChangeNotifier {
 
   List<Product> get products => _filteredProducts;
 
+  ProductService db = ProductService();
+
   void loadProducts(List<Product> products) {
     _allProducts = products;
     _filteredProducts = products;
+    var dbItem =  db.products();
     notifyListeners();
   }
 
@@ -25,6 +29,7 @@ class ProductViewModel extends ChangeNotifier {
 
   void addProduct(Product product) {
     _allProducts.add(product);
+    db.insertProduct(product);
     _filteredProducts.add(product);
     notifyListeners();
   }
@@ -34,6 +39,7 @@ class ProductViewModel extends ChangeNotifier {
     if (index != -1) {
       _allProducts[index] = updatedProduct;
       _filteredProducts[index] = updatedProduct;
+      db.updateProduct(updatedProduct) ;
       notifyListeners();
     }
   }
@@ -41,6 +47,7 @@ class ProductViewModel extends ChangeNotifier {
   void deleteProduct(int productId) {
     _allProducts.removeWhere((product) => product.id == productId);
     _filteredProducts.removeWhere((product) => product.id == productId);
+    //db.deleteProduct(id)
     notifyListeners();
   }
 }

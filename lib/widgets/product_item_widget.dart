@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/product.dart';
@@ -27,9 +29,9 @@ class ProductItemWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(12.0),
         ),
         elevation: 3,
-        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+        margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         child: Padding(
-          padding: const EdgeInsets.all(12.0),
+          padding: const EdgeInsets.all(10.0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -89,6 +91,7 @@ class ProductItemWidget extends StatelessWidget {
                   IconButton(
                     icon: const Icon(Icons.delete),
                     onPressed: () {
+                      //print("Json Decode - ${product.}");
                       _showDeleteConfirmationDialog(context, product);
                     },
                   ),
