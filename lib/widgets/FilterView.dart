@@ -78,8 +78,8 @@ class _FilterViewState extends State<FilterView> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                Provider.of<ProductViewModel>(context, listen: false).filterProducts(
+              onPressed: () async{
+                await Provider.of<ProductViewModel>(context, listen: false).filterProducts(
                   _selectedCategory,
                   _minPrice,
                   _maxPrice,

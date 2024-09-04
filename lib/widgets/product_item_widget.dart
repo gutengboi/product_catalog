@@ -91,7 +91,6 @@ class ProductItemWidget extends StatelessWidget {
                   IconButton(
                     icon: const Icon(Icons.delete),
                     onPressed: () {
-                      //print("Json Decode - ${product.}");
                       _showDeleteConfirmationDialog(context, product);
                     },
                   ),
@@ -104,6 +103,8 @@ class ProductItemWidget extends StatelessWidget {
     );
   }
 
+
+
   void _showDeleteConfirmationDialog(BuildContext context, Product product) {
     showDialog(
       context: context,
@@ -114,28 +115,32 @@ class ProductItemWidget extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(context).pop(); // Close the dialog
               },
               child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () async {
-
                 print('Attempting to delete product with ID: ${product.id}');
+                Navigator.of(context).pop(); // Close the dialog before deletion
 
                 if (product.id != null) {
+                  try {
+                    await Provider.of<ProductViewModel>(context, listen: false)
+                        .deleteProduct(product.id!);
 
-                  await Provider.of<ProductService>(context, listen: false)
-                      .deleteProduct(product.id!);
-
-                  Provider.of<ProductViewModel>(context, listen: false)
-                      .deleteProduct(product.id!);
-
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Product deleted successfully'),
-                    ),
-                  );
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Product deleted successfully'),
+                      ),
+                    );
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Error: Failed to delete product - $e'),
+                      ),
+                    );
+                  }
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -143,7 +148,6 @@ class ProductItemWidget extends StatelessWidget {
                     ),
                   );
                 }
-                Navigator.of(context).pop();
               },
               child: const Text(
                 'Delete',
@@ -155,5 +159,6 @@ class ProductItemWidget extends StatelessWidget {
       },
     );
   }
+
 
 }

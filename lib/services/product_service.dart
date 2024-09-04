@@ -4,6 +4,9 @@ import '../models/product.dart';
 
 class ProductService {
   Database? _database;
+  ProductService._();
+
+  static final ProductService db = ProductService._();
 
   Future<Database> get database async {
     if (_database != null) return _database!;
@@ -23,6 +26,8 @@ class ProductService {
     );
   }
 
+
+
   Future<void> insertProduct(Product product) async {
     final db = await database;
     final int id = await db.insert(
@@ -30,7 +35,6 @@ class ProductService {
       product.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-
     product.id = id;
   }
 
@@ -46,7 +50,7 @@ class ProductService {
 
   Future<void> updateProduct(Product product) async {
     final db = await database;
-    await db.update(
+    var id = await db.update(
       'products',
       product.toMap(),
       where: 'id = ?',
